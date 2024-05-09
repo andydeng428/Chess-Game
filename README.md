@@ -3,10 +3,13 @@
 
 ## About the Project
 
-I developed this chess game project as practice to improve my coding skills in C++ and practice object-oriented programming principles. The primary objective was to reinforce my understanding of fundamental concepts of OOP while also adhering to good coding practices such as DRY and SOLID. Throughout the development process, I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts like abstraction, encapsulation, and inheritance.
+Inspired after taking C++ coding courses, I developed this chess game project as practice to improve my coding skills in C++ and practice object-oriented programming principles. The primary objective was to reinforce my understanding of fundamental concepts of OOP while also adhering to good coding practices such as DRY and SOLID. Throughout the development process, I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts like abstraction, encapsulation, and inheritance.
 
-![image](https://github.com/andydeng428/Chess-Game/assets/156530133/7e28e8bd-22a3-4cfe-ac06-69983b6bc138)
+<div align="center">
+	<img src="https://github.com/andydeng428/Chess-Game/assets/156530133/7e28e8bd-22a3-4cfe-ac06-69983b6bc138">
+</div>
 
+While this project is stil in the early stages of developement, I am continuing on improving and developing new features and functionalities of this game, I am currently working on creating an UI using SFML graphics library as well as polishing up the functionalities such as allowing en passant and castling. I am also in the works of developing a simple chess engine using minimax algorithm and alpha beta pruning to better my thinking and problem solving during coding.
 
 ## Structure
 
