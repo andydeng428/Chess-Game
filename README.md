@@ -8,7 +8,7 @@ I developed this chess game project as practice to improve my coding skills in C
 ## Structure
 
 This project I focused heavily on modulating each entity of chess in a way that was logically, simple to read and easy to maintain. This is how I ultimately decided to structure the game:
-* **Board class** - This class represents the board, a 8x8 matrix with various functionalities movePiece(), isOccupied(), getPiece()
+* **Board class** - This class represents the board, a 8x8 matrix and allows various manipulation of pieces on the board 
 * **Piece class** - Parent class where the peices inherit from which serves the basic member functions and variables for any chess peice such as x y cords, color, and piece type
   * **Pawn class** - The pawn inherits from the Piece class, and has its own functionalities such as double moving for first move
   * **Rook class** - Same thing
