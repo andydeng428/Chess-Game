@@ -4,6 +4,7 @@
 ## About the Project
 
 I developed this chess game project as practice to improve my coding skills in C++ and practice object-oriented programming principles. The primary objective was to reinforce my understanding of fundamental concepts of OOP while also adhering to good coding practices such as DRY and SOLID. Throughout the development process, I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts like abstraction, encapsulation, and inheritance.
+
 ![image](https://github.com/andydeng428/Chess-Game/assets/156530133/534d6b79-557b-4114-b367-95b668172bb2)
 
 ## Structure
@@ -12,7 +13,7 @@ This project I focused heavily on modulating each entity of chess in a way that 
 * **Board class** - This class represents the board, a 8x8 matrix and allows manipulation of pieces on the board 
 * **Piece class** - Parent class where the peices inherit from which serves the basic member functions and variables for any chess peice such as x y cords, color, and piece type
   * **Pawn class** - The pawn inherits from the Piece class, and has its own functionalities such as double moving for first move
-  * **Rook class** - Same thing
+  * **Rook class** - Same as pawn...
   * **Knight class** 
   * **Bishop class**
   * **King class**
