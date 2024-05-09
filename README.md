@@ -3,13 +3,16 @@
 
 ## About the Project
 
-Inspired after taking C++ coding courses, I developed this chess game project as practice to improve my coding skills in C++ and object-oriented programming principles. My main goal for this was to better understand the fundamental concepts of OOP and good coding practices such as DRY and SOLID. I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts like abstraction, encapsulation, and inheritance.
+Inspired after taking C++ coding courses, I developed this chess game project as practice to improve my coding skills in C++ and object-oriented programming principles. My main goal for this was to better understand the fundamental concepts of OOP and good coding practices such as DRY and SOLID. I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts.
 
 <div align="center">
 	<img src="https://github.com/andydeng428/Chess-Game/assets/156530133/7e28e8bd-22a3-4cfe-ac06-69983b6bc138">
 </div>
 
-While this project is stil in the early stages of developement, I am continuing on improving and developing new features and functionalities of this game, I am currently working on creating an UI using SFML graphics library as well as polishing up the functionalities such as allowing en passant and castling. I am also in the works of developing a simple chess engine using minimax algorithm and alpha beta pruning to better my thinking and problem solving during coding.
+While this project is stil in the early stages of developement, I am continuing on improving and developing new features and functionalities of this game. Heres my checklist:
+* Finish the UI with SFML graphical interface, as well as finishing implementing rules such as en passent, castling, fifty-move rule
+* Develop a chess engine using minimax algorithm and alpha beta pruning to exersize thinking and problem solving during coding
+* Include 2 player functionalities locally or online
 
 ## Structure
 
