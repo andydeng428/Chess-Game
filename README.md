@@ -5,7 +5,8 @@
 
 I developed this chess game project as practice to improve my coding skills in C++ and practice object-oriented programming principles. The primary objective was to reinforce my understanding of fundamental concepts of OOP while also adhering to good coding practices such as DRY and SOLID. Throughout the development process, I strived to maintain clean, readable code and ensure that I implimented the essential object-oriented coding concepts like abstraction, encapsulation, and inheritance.
 
-![image](https://github.com/andydeng428/Chess-Game/assets/156530133/534d6b79-557b-4114-b367-95b668172bb2)
+![image](https://github.com/andydeng428/Chess-Game/assets/156530133/7e28e8bd-22a3-4cfe-ac06-69983b6bc138)
+
 
 ## Structure
 
