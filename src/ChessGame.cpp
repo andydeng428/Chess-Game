@@ -5,32 +5,19 @@
 #include "Knight.h"
 #include "Bishop.h"
 #include "Queen.h"
+#include "ChessRuleBook.h"
 
-ChessGame::ChessGame() {
+const int tileSize = 100;
+
+ChessGame::ChessGame() : selected(false), selectedX(-1), selectedY(-1) {
     currentPlayer = Color::WHITE;
 }
 
-void ChessGame::startGame(){
+void ChessGame::startGame() {
     initializeBoard();
-    bool gameOver = false;
-    //game loop
-    while(!gameOver){
-        //get move input
-        int startX, startY, endX, endY;
-        if (performMove(startX, startY, endX, endY)) {
-            if (isGameEnded()) {
-                gameOver = true;
-            } else {
-                //switch player
-                currentPlayer = (currentPlayer == Color::WHITE) ? Color::BLACK : Color::WHITE;
-            }
-        }
-        //try again with different move
-    }
 }
 
-
-void ChessGame::initializeBoard(){
+void ChessGame::initializeBoard() {
     for (int i = 0; i < 8; ++i) {
         board.getPiece(i, 1) = new Pawn(Color::WHITE);
         board.getPiece(i, 6) = new Pawn(Color::BLACK);
@@ -51,59 +38,53 @@ void ChessGame::initializeBoard(){
     board.getPiece(5, 7) = new Bishop(Color::BLACK);
     board.getPiece(3, 0) = new Queen(Color::WHITE);
     board.getPiece(3, 7) = new Queen(Color::BLACK);
-    // all other empty squares are set to nullptr
+
     for (int i = 0; i < 8; ++i) {
         for (int j = 2; j < 6; ++j) {
             board.getPiece(i, j) = nullptr;
         }
     }
 }
-}
 
-bool ChessGame::performMove(int startX, int startY, int endX, int endY){
-    if (startX < 0||startX >= 8||startY < 0||startY >= 8||endX < 0|| endX >= 8||endY< 0||endY >= 8){
+bool ChessGame::performMove(int startX, int startY, int endX, int endY) {
+    if (startX < 0 || startX >= 8 || startY < 0 || startY >= 8 || endX < 0 || endX >= 8 || endY < 0 || endY >= 8) {
         return false;
     }
-    //check if piece exists at start cords
-    if (!board.isOccupied(startX, startY)){
+    if (!board.isOccupied(startX, startY)) {
         return false;
     }
     Piece* piece = board.getPiece(startX, startY);
-    //refer to chessrulebook
-    if (!ChessRuleBook::isMoveLegal(piece, board, startX, startY, endX, endY)){
+    if (!ChessRuleBook::isMoveLegal(piece, board, startX, startY, endX, endY)) {
         return false;
     }
-    if (board.isOccupied(endX, endY)){
+    if (board.isOccupied(endX, endY)) {
         delete board.getPiece(endX, endY);
     }
     board.movePiece(endX, endY, startX, startY);
     return true;
 }
 
-bool ChessGame::isCheckmate(Color playerColor){
-    //find playerColor's king
-    int kingX = -99999, kingY = -99999;
+bool ChessGame::isCheckmate(Color playerColor) {
+    int kingX = -1, kingY = -1;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Piece* piece = board.getPiece(i, j);
-            if ((piece != nullptr) && (piece->getColor() == playerColor) && (piece->getPieceType() == PieceType::KING)){
+            if (piece != nullptr && piece->getColor() == playerColor && piece->getPieceType() == PieceType::KING) {
                 kingX = i;
                 kingY = j;
                 break;
             }
         }
-        if (kingX != -99999) break;
+        if (kingX != -1) break;
     }
+
     bool kingInCheck = false;
-    for (int i = 0; i < 8 && !kingInCheck; ++i){
-        for (int j = 0; j < 8 && !kingInCheck; ++j){
-            //skip king
-            if (i == kingX && j == kingY){
-                continue;
-            }
+    for (int i = 0; i < 8 && !kingInCheck; ++i) {
+        for (int j = 0; j < 8 && !kingInCheck; ++j) {
+            if (i == kingX && j == kingY) continue;
             Piece* attacker = board.getPiece(i, j);
-            if ((attacker != nullptr && attacker->getColor() )!= playerColor){
-                if (ChessRuleBook::isMoveLegal(attacker, board, i, j, kingX, kingY)){
+            if (attacker != nullptr && attacker->getColor() != playerColor) {
+                if (ChessRuleBook::isMoveLegal(attacker, board, i, j, kingX, kingY)) {
                     kingInCheck = true;
                 }
             }
@@ -114,17 +95,14 @@ bool ChessGame::isCheckmate(Color playerColor){
         return false;
     }
 
-    //check if king can get out of check
     for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy){
-            if (dx == 0 && dy == 0){
-                continue;
-            }
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
             int newX = kingX + dx;
             int newY = kingY + dy;
-            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8){
-                if (!board.isOccupied(newX, newY) ||(board.getPiece(newX, newY)->getColor() != playerColor)){
-                    if (!isKingInCheck(playerColor, newX, newY)){
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
+                if (!board.isOccupied(newX, newY) || board.getPiece(newX, newY)->getColor() != playerColor) {
+                    if (!isKingInCheck(playerColor, newX, newY)) {
                         return false;
                     }
                 }
@@ -132,25 +110,22 @@ bool ChessGame::isCheckmate(Color playerColor){
         }
     }
 
-    //check if any playerColor piece can block or capture the opposition
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             if (i == kingX && j == kingY) continue;
             Piece* piece = board.getPiece(i, j);
-            if (piece != nullptr && piece->getColor() == playerColor){
+            if (piece != nullptr && piece->getColor() == playerColor) {
                 for (int x = 0; x < 8; ++x) {
                     for (int y = 0; y < 8; ++y) {
-                        if (x == i && y == j){
-                            continue;
-                        }
-                        if (ChessRuleBook::isMoveLegal(piece, board, i, j, x, y)){
+                        if (x == i && y == j) continue;
+                        if (ChessRuleBook::isMoveLegal(piece, board, i, j, x, y)) {
                             Piece* capturedPiece = board.getPiece(x, y);
                             board.movePiece(x, y, i, j);
-                            if (!isKingInCheck(playerColor, kingX, kingY)){
+                            if (!isKingInCheck(playerColor, kingX, kingY)) {
                                 board.movePiece(i, j, x, y);
                                 board.movePiece(x, y, i, j);
                                 return false;
-                            }//revert back the moves
+                            }
                             board.movePiece(i, j, x, y);
                             board.movePiece(x, y, i, j);
                         }
@@ -163,14 +138,12 @@ bool ChessGame::isCheckmate(Color playerColor){
 }
 
 bool ChessGame::isStalemate(Color currentPlayer, const Board& board) {
-    //iterate all squares on the board, and with each piece iterate all squares on board again to find all possible moves
     for (int x = 0; x < 8; ++x) {
         for (int y = 0; y < 8; ++y) {
-            if (board.isOccupied(x, y) && (board.getPiece(x, y)->getColor() == currentPlayer)){
-                // check legal moves of that piece
+            if (board.isOccupied(x, y) && board.getPiece(x, y)->getColor() == currentPlayer) {
                 for (int newX = 0; newX < 8; ++newX) {
                     for (int newY = 0; newY < 8; ++newY) {
-                        if (ChessRuleBook::isMoveLegal(board.getPiece(x, y), board, x, y, newX, newY)){
+                        if (ChessRuleBook::isMoveLegal(board.getPiece(x, y), board, x, y, newX, newY)) {
                             return false;
                         }
                     }
@@ -181,9 +154,7 @@ bool ChessGame::isStalemate(Color currentPlayer, const Board& board) {
     return true;
 }
 
-
 bool ChessGame::isGameEnded(Color currentPlayer, const Board& board) {
-    //count remaining peices on the board
     int totalPieces = 0;
     for (int x = 0; x < 8; ++x) {
         for (int y = 0; y < 8; ++y) {
@@ -195,7 +166,6 @@ bool ChessGame::isGameEnded(Color currentPlayer, const Board& board) {
     if (totalPieces <= 2) {
         return true;
     }
-    //check for checkmate
     if (ChessRuleBook::isCheckmate(currentPlayer, board)) {
         return true;
     }
@@ -203,4 +173,45 @@ bool ChessGame::isGameEnded(Color currentPlayer, const Board& board) {
         return true;
     }
     return false;
+}
+
+void ChessGame::drawBoard(sf::RenderWindow &window) {
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            sf::RectangleShape tile(sf::Vector2f(tileSize, tileSize));
+            tile.setPosition(i * tileSize, j * tileSize);
+            if ((i + j) % 2 == 0) {
+                tile.setFillColor(sf::Color::White);
+            } else {
+                tile.setFillColor(sf::Color::Black);
+            }
+            window.draw(tile);
+            if (board.isOccupied(i, j)) {
+                Piece* piece = board.getPiece(i, j);
+                sf::CircleShape pieceShape(tileSize / 2 - 10);
+                pieceShape.setPosition(i * tileSize + 10, j * tileSize + 10);
+                pieceShape.setFillColor(piece->getColor() == Color::WHITE ? sf::Color::Yellow : sf::Color::Red);
+                window.draw(pieceShape);
+            }
+        }
+    }
+}
+
+void ChessGame::handleClick(int x, int y) {
+    if (!selected) {
+        if (board.isOccupied(x, y) && board.getPiece(x, y)->getColor() == currentPlayer) {
+            selected = true;
+            selectedX = x;
+            selectedY = y;
+        }
+    } else {
+        if (performMove(selectedX, selectedY, x, y)) {
+            if (isGameEnded(currentPlayer, board)) {
+                // handle game end logic
+            } else {
+                currentPlayer = (currentPlayer == Color::WHITE) ? Color::BLACK : Color::WHITE;
+            }
+        }
+        selected = false;
+    }
 }
